@@ -959,16 +959,16 @@ window.Auth = Auth;
   function s2() {
     return `
     <span class="group-label">Cuisine <em>— every dish in the plan is cooked this way</em></span>
-    <div class="chip-grid">${Object.entries(CUISINES)
+    <div class="chip-grid" aria-label="Cuisine selection">${Object.entries(CUISINES)
       .map(([k, v]) => chip('cuisine', k, v.n, v.d, false, v.emoji)).join('')}</div>
 
     <span class="group-label">Dietary preference</span>
-    <div class="chip-grid">${Object.entries(DIETS)
+    <div class="chip-grid" aria-label="Dietary preference selection">${Object.entries(DIETS)
       .map(([k, v]) => chip('diet', k, v.n, v.d, false,
         { vegan:'🌱', veg:'🥕', egg:'🥚', nonveg:'🍗' }[k])).join('')}</div>
 
     <span class="group-label">Allergies <em>— tap all that apply, leave blank if none</em></span>
-    <div class="chip-grid chip-grid--tight">${Object.entries(ALLERGENS)
+    <div class="chip-grid chip-grid--tight" aria-label="Allergy selection">${Object.entries(ALLERGENS)
       .map(([k, v]) => chip('allergies', k, v, '', true,
         { dairy:'🥛', gluten:'🌾', peanut:'🥜', nuts:'🌰', egg:'🥚', fish:'🐟', soy:'🫘', sesame:'🌻' }[k])).join('')}</div>`;
   }
@@ -976,13 +976,14 @@ window.Auth = Auth;
   function s3() {
     return `
     <span class="group-label">Cooking experience</span>
-    <div class="chip-grid">${Object.entries(SKILLS)
+    <div class="chip-grid" aria-label="Cooking experience selection">${Object.entries(SKILLS)
       .map(([k, v]) => chip('skill', +k, v.n, v.d, false, { 1:'🥄', 2:'🍳', 3:'🔪' }[k])).join('')}</div>
 
     <span class="group-label">Available cooking time <em>— per meal, start to plate</em></span>
     <div class="slider-card">
       <div class="slider-card__value"><span id="timeOut">${S.time}</span><em>minutes</em></div>
-      <input type="range" id="time" class="range" min="10" max="60" step="5" value="${S.time}">
+      <input type="range" id="time" class="range" min="10" max="60" step="5" value="${S.time}"
+        aria-label="Available cooking time in minutes">
       <div class="slider-card__scale"><span>10 min</span><span>35 min</span><span>60 min</span></div>
     </div>`;
   }
