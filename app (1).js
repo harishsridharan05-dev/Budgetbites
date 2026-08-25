@@ -998,7 +998,8 @@ window.Auth = Auth;
     <span class="group-label">Grocery budget <em>— total for the whole plan, everyone eating</em></span>
     <div class="slider-card">
       <div class="slider-card__value"><span id="budgetOut">${money(S.budget)}</span></div>
-      <input type="range" id="budget" class="range" min="500" max="15000" step="100" value="${S.budget}">
+      <input type="range" id="budget" class="range" min="500" max="15000" step="100" value="${S.budget}"
+        aria-label="Grocery budget in rupees">
       <div class="slider-card__scale"><span>₹500</span><span>₹7,750</span><span>₹15,000</span></div>
     </div>
 
@@ -1012,7 +1013,8 @@ window.Auth = Auth;
      ================================================================== */
   function drawForm() {
     const st = STEPS[step];
-    $('#stepno').textContent = `Step ${step + 1} of ${STEPS.length}`;
+    const progress = Math.round((step + 1) / STEPS.length * 100);
+    $('#stepno').textContent = `Step ${step + 1} of ${STEPS.length} · ${progress}% complete`;
     $('#formBody').innerHTML =
       `<h3 class="step__legend"><span>${st.icon}</span> ${esc(st.t)}</h3>
        <p class="step__hint">${esc(st.h)}</p>${st.render()}`;
@@ -1021,7 +1023,11 @@ window.Auth = Auth;
       `<li class="${i === step ? 'is-active' : ''} ${i < step ? 'is-done' : ''}" data-step="${i}">
          <span class="dot">${s.icon}</span><em>${esc(s.label)}</em></li>`).join('');
 
-    $('#progressFill').style.width = ((step + 1) / STEPS.length * 100) + '%';
+    $('#progressFill').style.width = progress + '%';
+    $('#progressFill').setAttribute('role', 'progressbar');
+    $('#progressFill').setAttribute('aria-valuenow', progress);
+    $('#progressFill').setAttribute('aria-valuemin', '0');
+    $('#progressFill').setAttribute('aria-valuemax', '100');
     $('#backBtn').disabled = step === 0;
     $('#nextBtn').textContent = step === STEPS.length - 1 ? 'Generate my plan' : 'Continue';
     $('#err').textContent = '';
