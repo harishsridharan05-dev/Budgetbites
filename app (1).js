@@ -48,6 +48,26 @@ function targets(S) {
            bmi: Math.round(bmi * 10) / 10, bmiBand };
 }
 
+/* Calculate average macro values from a meal plan.
+   Returns { kcal, protein, carbs, fat } as daily averages across the plan. */
+function macrosOf(days, factors) {
+  if (!days || !days.length) return { kcal: 0, protein: 0, carbs: 0, fat: 0 };
+  
+  const sumBy = key => days.map((d, i) => 
+    d.reduce((a, r) => a + (r ? r[key] : 0), 0) * (factors[i] || 1)
+  );
+  
+  const avg = arr => Math.round(arr.reduce((a, b) => a + b, 0) / days.length);
+  
+  const dayKcal = sumBy('kcal').map(Math.round);
+  const avgK = avg(dayKcal);
+  const avgP = avg(sumBy('pro'));
+  const avgC = avg(sumBy('carb'));
+  const avgF = avg(sumBy('fat'));
+  
+  return { kcal: avgK, protein: avgP, carbs: avgC, fat: avgF };
+}
+
 const SHARE_4 = { breakfast: .25, lunch: .34, dinner: .30, snack: .11 };
 const SHARE_3 = { breakfast: .28, lunch: .38, dinner: .34 };
 
@@ -1273,10 +1293,15 @@ window.Auth = Auth;
         <p class="score__note">target ${T.protein} g</p></div>
     </div>
 
+    <div class="kitchen-stats-strip">
+      <div class="kitchen-stat"><span class="kitchen-stat__value" id="resultRecipes">—</span><span class="kitchen-stat__label">Recipes</span></div>
+      <div class="kitchen-stat"><span class="kitchen-stat__value" id="resultIngredients">—</span><span class="kitchen-stat__label">Ingredients</span></div>
+      <div class="kitchen-stat"><span class="kitchen-stat__value" id="resultBrands">—</span><span class="kitchen-stat__label">Brands</span></div>
+    </div>
+
     <div class="tabs" role="tablist">
       ${[['mealplan','🍽️','Meal plan'],['grocery','🛒','Grocery list'],['nutrition','📊','Nutrition'],
-         ['brands','🏷️','Brand analysis'],['order','🚚','Where to order'],['reuse','♻️','Reuse'],
-         ['shopping','📅','Shopping plan']].map(([k,e,l]) =>
+         ['brands','🏷️','Brand analysis'],['order','🚚','Where to order']].map(([k,e,l]) =>
         `<button class="tab ${activeTab === k ? 'is-active' : ''}" role="tab" data-panel="${k}"><span>${e}</span> ${l}</button>`).join('')}
     </div>
 
@@ -1356,16 +1381,17 @@ window.Auth = Auth;
     <div class="panel ${activeTab === 'nutrition' ? 'is-active' : ''}" id="panel-nutrition">
       <div class="nutri-grid">
         <div class="card">
-          <h3 class="card__title">Against your targets</h3>
+          <h3 class="card__title">Nutrition dashboard</h3>
           <p class="card__sub">Per person, per day, averaged across the plan.</p>
           <div class="macro-list">
-            ${[['Protein', avgP, T.protein, 'var(--c1)'],
-               ['Carbohydrate', avgC, T.carbs, 'var(--c2)'],
-               ['Fat', avgF, T.fat, 'var(--c3)']].map(([n, v, t, c]) => `
+            ${[['Calories', avgK, T.kcal, 'var(--c1)', 'kcal'],
+               ['Protein', avgP, T.protein, 'var(--c1)', 'g'],
+               ['Carbohydrate', avgC, T.carbs, 'var(--c2)', 'g'],
+               ['Fat', avgF, T.fat, 'var(--c3)', 'g']].map(([n, v, t, c, u]) => `
               <div class="macro">
                 <div class="macro__top"><span class="macro__name">${n}</span>
-                  <span class="macro__target">target ${t}g</span>
-                  <span class="macro__val">${v}g</span></div>
+                  <span class="macro__target">target ${t}${u}</span>
+                  <span class="macro__val">${v}<small>${u}</small></span></div>
                 <div class="bar"><i style="width:${Math.min(100, v / t * 100)}%;background:${c}"></i></div>
               </div>`).join('')}
           </div>
@@ -1456,34 +1482,6 @@ window.Auth = Auth;
       </div>
     </div>
 
-    <!-- ═══════════ REUSE ═══════════ -->
-    <div class="panel ${activeTab === 'reuse' ? 'is-active' : ''}" id="panel-reuse">
-      <div class="card">
-        <h3 class="card__title">Ingredient reuse</h3>
-        <p class="card__sub">The overlap that makes the bill work. Buy these once, use them all week.</p>
-        ${reuse.length ? `<div class="reuse">${reuse.map(l => `
-          <div class="reuse-card">
-            <div class="top"><b>${esc(l.name)}</b><span class="cnt">${l.meals} dishes</span></div>
-            <p>One ${qtyLabel(l)} buy at ${money(l.cost)} covers every use in the plan.</p>
-            <div class="in">→ ${esc(l.mealNames.slice(0, 3).join(' · '))}${
-              l.mealNames.length > 3 ? ' · +' + (l.mealNames.length - 3) + ' more' : ''}</div>
-          </div>`).join('')}</div>`
-        : `<p class="card__sub">Nothing repeats in this plan — a longer duration usually creates more overlap.</p>`}
-      </div>
-    </div>
-
-    <!-- ═══════════ SHOPPING ═══════════ -->
-    <div class="panel ${activeTab === 'shopping' ? 'is-active' : ''}" id="panel-shopping">
-      <div class="card">
-        <h3 class="card__title">Weekly shopping recommendations</h3>
-        <p class="card__sub">When to buy what, so nothing rots in the drawer.</p>
-        <div class="recs">${shoppingRecs(S, lines, pantryCost, over, shown, hidePantry).map(r => `
-          <div class="rec"><span class="tag">${esc(r.tag)}</span>
-            <div><b>${esc(r.t)}</b><p>${esc(r.p)}</p></div></div>`).join('')}
-        </div>
-      </div>
-    </div>
-
     <div class="results__foot no-print">
       <button class="btn btn--ghost" id="editBtn">Change my answers</button>
       <button class="btn btn--primary" id="redoBtn">Regenerate plan</button>
@@ -1497,6 +1495,15 @@ window.Auth = Auth;
 
   /* ------------------------------------------------------------ results wiring */
   function bindResults(lines, shown) {
+    // Populate Kitchen Stats strip in Results
+    const brandCount = Object.values(BR).flat().length;
+    const resultRecipes = $('#resultRecipes');
+    const resultIngredients = $('#resultIngredients');
+    const resultBrands = $('#resultBrands');
+    if (resultRecipes) resultRecipes.textContent = RECIPES.length;
+    if (resultIngredients) resultIngredients.textContent = Object.keys(ING).length;
+    if (resultBrands) resultBrands.textContent = brandCount;
+
     $$('.tab').forEach(tab => tab.addEventListener('click', () => {
       activeTab = tab.dataset.panel;
       $$('.tab').forEach(t => t.classList.toggle('is-active', t === tab));
