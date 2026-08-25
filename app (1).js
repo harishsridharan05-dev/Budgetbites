@@ -948,7 +948,7 @@ window.Auth = Auth;
       .map(([k, v]) => chip('goal', k, v.n, v.d, false,
         { lose:'🔥', maintain:'⚖️', gain:'🌱', muscle:'💪' }[k])).join('')}</div>
 
-    <span class="group-label">Number of consumers <em>— everyone eating from this plan</em></span>
+    <span class="group-label">Household size / number of consumers <em>— everyone eating from this plan</em></span>
     <div class="slider-card">
       <div class="slider-card__value"><span id="peopleOut">${S.people}</span><em>${S.people > 1 ? 'people' : 'person'}</em></div>
       <input type="range" id="people" class="range" min="1" max="8" step="1" value="${S.people}">
