@@ -1275,8 +1275,7 @@ window.Auth = Auth;
 
     <div class="tabs" role="tablist">
       ${[['mealplan','🍽️','Meal plan'],['grocery','🛒','Grocery list'],['nutrition','📊','Nutrition'],
-         ['brands','🏷️','Brand analysis'],['order','🚚','Where to order'],['reuse','♻️','Reuse'],
-         ['shopping','📅','Shopping plan']].map(([k,e,l]) =>
+         ['brands','🏷️','Brand analysis'],['order','🚚','Where to order']].map(([k,e,l]) =>
         `<button class="tab ${activeTab === k ? 'is-active' : ''}" role="tab" data-panel="${k}"><span>${e}</span> ${l}</button>`).join('')}
     </div>
 
@@ -1452,34 +1451,6 @@ window.Auth = Auth;
           and by dark store, and a browser page cannot read them directly — the numbers above apply each
           platform's typical price position and fee structure to your basket. The links are live: they open
           a real search on that app, where you will see today's price.
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════ REUSE ═══════════ -->
-    <div class="panel ${activeTab === 'reuse' ? 'is-active' : ''}" id="panel-reuse">
-      <div class="card">
-        <h3 class="card__title">Ingredient reuse</h3>
-        <p class="card__sub">The overlap that makes the bill work. Buy these once, use them all week.</p>
-        ${reuse.length ? `<div class="reuse">${reuse.map(l => `
-          <div class="reuse-card">
-            <div class="top"><b>${esc(l.name)}</b><span class="cnt">${l.meals} dishes</span></div>
-            <p>One ${qtyLabel(l)} buy at ${money(l.cost)} covers every use in the plan.</p>
-            <div class="in">→ ${esc(l.mealNames.slice(0, 3).join(' · '))}${
-              l.mealNames.length > 3 ? ' · +' + (l.mealNames.length - 3) + ' more' : ''}</div>
-          </div>`).join('')}</div>`
-        : `<p class="card__sub">Nothing repeats in this plan — a longer duration usually creates more overlap.</p>`}
-      </div>
-    </div>
-
-    <!-- ═══════════ SHOPPING ═══════════ -->
-    <div class="panel ${activeTab === 'shopping' ? 'is-active' : ''}" id="panel-shopping">
-      <div class="card">
-        <h3 class="card__title">Weekly shopping recommendations</h3>
-        <p class="card__sub">When to buy what, so nothing rots in the drawer.</p>
-        <div class="recs">${shoppingRecs(S, lines, pantryCost, over, shown, hidePantry).map(r => `
-          <div class="rec"><span class="tag">${esc(r.tag)}</span>
-            <div><b>${esc(r.t)}</b><p>${esc(r.p)}</p></div></div>`).join('')}
         </div>
       </div>
     </div>
