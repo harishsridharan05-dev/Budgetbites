@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Budget Bites — Meal & Grocery Planning, Made Delicious</title>
+<meta name="description" content="Budget Bites builds a personalised meal schedule, a pack-costed grocery list, brand comparisons and a nutrition summary that fits your body, your kitchen and your budget.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍓</text></svg>">
+</head>
+<body>
+
+<!-- ═════════════════════════════ LOGIN SCREEN ══════════════════════════════ -->
+<div class="authscreen" id="authScreen" hidden></div>
+
+<!-- ══════════════════════════ DECORATIVE BACKDROP ══════════════════════════ -->
+<div class="backdrop" aria-hidden="true">
+  <span class="blob blob--1"></span>
+  <span class="blob blob--2"></span>
+  <span class="blob blob--3"></span>
+</div>
+
+<!-- ═════════════════════════════════ NAV ═══════════════════════════════════ -->
+<header class="topbar">
+  <a class="brand" href="#top">
+    <span class="brand__mark" aria-hidden="true">
+      <svg viewBox="0 0 48 48">
+        <defs>
+          <linearGradient id="bbGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="48" y2="48">
+            <stop stop-color="#FF8FBB"/><stop offset="1" stop-color="#C40E56"/>
+          </linearGradient>
+        </defs>
+        <rect x="1" y="1" width="46" height="46" rx="14" fill="url(#bbGrad)"/>
+        <path d="M24.5 9.5 37 22a3.5 3.5 0 0 1 0 5l-9.5 9.5a3.5 3.5 0 0 1-5 0L10 24V13a3.5 3.5 0 0 1 3.5-3.5h11Z" fill="#fff" fill-opacity=".95"/>
+        <circle cx="17.5" cy="16.5" r="2.8" fill="#D2115C"/>
+        <path d="M26 8.5c3.5-1.5 7-1 9 1-2.5 2.5-6 3-9-1Z" fill="#fff"/>
+      </svg>
+    </span>
+    <span class="brand__text">Budget<em>Bites</em></span>
+  </a>
+
+  <nav class="topbar__nav">
+    <a href="#how">How it works</a>
+    <a href="#plan">Build a plan</a>
+    <a href="#results" id="navResults" hidden>Your plan</a>
+    <a href="#kitchen">The kitchen</a>
+  </nav>
+
+  <div class="topbar__acct" id="accountSlot"></div>
+
+  <a href="#plan" class="btn btn--sm btn--primary topbar__cta">Start planning</a>
+</header>
+
+<main id="top">
+
+<!-- ════════════════════════════════ HERO ═══════════════════════════════════ -->
+<section class="hero">
+  <div class="hero__inner">
+
+    <div class="hero__copy">
+      <span class="eyebrow"><span class="eyebrow__dot"></span> Eat well · Spend less</span>
+
+      <h1 class="hero__title">
+        Your week of meals,<br>
+        <span class="script">planned to the rupee.</span>
+      </h1>
+
+      <p class="hero__lede">
+        Tell Budget Bites about your body, your kitchen and what you can actually spend.
+        It writes the menu, prices the shop at real pack sizes and real brands, compares
+        the delivery apps, and shows you every ingredient that earns its place twice.
+      </p>
+
+      <div class="hero__actions">
+        <a href="#plan" class="btn btn--primary btn--lg">
+          Build my meal plan
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m0 0-4.5-4.5M16 10l-4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#how" class="btn btn--ghost btn--lg">See how it works</a>
+      </div>
+
+      <ul class="hero__stats">
+        <li><strong id="heroRecipes">—</strong><span>recipes</span></li>
+        <li><strong id="heroBrands">—</strong><span>priced brands</span></li>
+        <li><strong>4</strong><span>delivery apps</span></li>
+      </ul>
+    </div>
+
+    <div class="hero__plate" aria-hidden="true">
+      <div class="plate">
+        <div class="plate__ring"></div>
+        <div class="plate__inner">
+          <span class="plate__emoji plate__emoji--c">🍛</span>
+        </div>
+        <span class="orbit orbit--1">🍓</span>
+        <span class="orbit orbit--2">🥥</span>
+        <span class="orbit orbit--3">🥕</span>
+        <span class="orbit orbit--4">🫑</span>
+        <span class="orbit orbit--5">🍅</span>
+        <span class="orbit orbit--6">🥬</span>
+      </div>
+      <div class="price-tag">
+        <span class="price-tag__label">Est. weekly shop</span>
+        <span class="price-tag__value">₹2,316</span>
+      </div>
+      <div class="macro-tag">
+        <span class="macro-tag__dot"></span> 4 cuisines to cook from
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker">
+    <div class="ticker__track">
+      <span>🍓 personalised meal plans</span><span>🛒 optimised grocery lists</span>
+      <span>💗 real brands, real pack sizes</span><span>🥗 nutritional summary</span>
+      <span>♻️ ingredient reuse</span><span>📅 weekly shopping plan</span>
+      <span>🥡 four cuisines</span><span>📖 full recipes for every meal</span>
+      <span>🍓 personalised meal plans</span><span>🛒 optimised grocery lists</span>
+      <span>💗 real brands, real pack sizes</span><span>🥗 nutritional summary</span>
+      <span>♻️ ingredient reuse</span><span>📅 weekly shopping plan</span>
+      <span>🥡 four cuisines</span><span>📖 full recipes for every meal</span>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ HOW IT WORKS ════════════════════════════ -->
+<section class="section" id="how">
+  <div class="section__head">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> The recipe</span>
+    <h2 class="section__title">Three steps between you and dinner</h2>
+    <p class="section__lede">No accounts, no subscriptions, no waiting. Everything runs the moment you finish the form.</p>
+  </div>
+
+  <div class="steps">
+    <article class="step-card">
+      <span class="step-card__num">01</span>
+      <span class="step-card__icon">📝</span>
+      <h3>Tell us about you</h3>
+      <p>Age, height and weight, cuisine, dietary preference, allergies, goal, budget, kitchen confidence, time, plan length and how many mouths you're feeding.</p>
+    </article>
+
+    <article class="step-card step-card--accent">
+      <span class="step-card__num">02</span>
+      <span class="step-card__icon">🧠</span>
+      <h3>We do the maths</h3>
+      <p>Energy needs from your measurements, a menu in your chosen cuisine that hits those numbers, then the shop priced at real pack sizes across three brand tiers.</p>
+    </article>
+
+    <article class="step-card">
+      <span class="step-card__num">03</span>
+      <span class="step-card__icon">🛒</span>
+      <h3>Cook and shop</h3>
+      <p>Every dish comes with its full recipe. The list is sorted by aisle, costed to the rupee, and priced across Blinkit, Zepto, Instamart and BigBasket.</p>
+    </article>
+  </div>
+
+  <div class="deliver-grid">
+    <div class="deliver"><span>🍽️</span><h4>Personalised meal plans</h4><p>Breakfast, lunch, dinner and a snack, every day of your plan.</p></div>
+    <div class="deliver"><span>📖</span><h4>A recipe for every meal</h4><p>Tap any dish for its method, quantities and the one tip that matters.</p></div>
+    <div class="deliver"><span>🛒</span><h4>Optimised grocery lists</h4><p>Rounded to real pack sizes, grouped by aisle, ticked off as you shop.</p></div>
+    <div class="deliver"><span>💰</span><h4>Estimated grocery cost</h4><p>Value, popular and premium brands — the same plan, priced three ways.</p></div>
+    <div class="deliver"><span>📊</span><h4>Nutritional summary</h4><p>Calories, protein, carbs and fat against your targets, day by day.</p></div>
+    <div class="deliver"><span>🚚</span><h4>Where to order</h4><p>Your basket priced across four delivery apps, with live search links.</p></div>
+    <div class="deliver"><span>♻️</span><h4>Ingredient reuse</h4><p>Every ingredient that earns its place more than once.</p></div>
+    <div class="deliver"><span>📅</span><h4>Weekly shopping plan</h4><p>What to buy when, so fresh food gets eaten fresh.</p></div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ WIZARD ════════════════════════════════ -->
+<section class="section section--plan" id="plan">
+  <div class="section__head">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> Let's cook</span>
+    <h2 class="section__title">Build your plan</h2>
+    <p class="section__lede">Four steps, about ninety seconds. Then a whole week sorted.</p>
+  </div>
+
+  <div class="planner-grid">
+    <form class="wizard" id="wizard" novalidate onsubmit="return false">
+      <div class="wizard__progress">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <ol class="progress-steps" id="progressSteps"></ol>
+      </div>
+
+      <div id="formBody"></div>
+      <div class="err" id="err" role="alert" aria-live="polite"></div>
+
+      <div class="wizard__nav">
+        <button type="button" class="btn btn--ghost" id="backBtn">Back</button>
+        <span class="wizard__count" id="stepno"></span>
+        <button type="button" class="btn btn--primary" id="nextBtn">Continue</button>
+      </div>
+    </form>
+
+    <aside class="tally">
+      <div class="tally__head">
+        <span class="eyebrow"><span class="eyebrow__dot"></span> Your docket</span>
+      </div>
+      <div id="tallyBody"></div>
+      <p class="tally__note" id="tallyNote"></p>
+    </aside>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ RESULTS ═══════════════════════════════ -->
+<section class="results" id="results" hidden></section>
+
+<!-- ═══════════════════════════════ THE KITCHEN ═════════════════════════════ -->
+<section class="section" id="kitchen">
+  <div class="section__head">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> Under the hood</span>
+    <h2 class="section__title">What's actually in the kitchen</h2>
+    <p class="section__lede">Budget Bites plans from a real, costed pantry of Indian brands — not from vibes.</p>
+  </div>
+
+  <div class="kitchen-grid">
+    <div class="kitchen-stat"><strong id="statRecipes">—</strong><span>recipes in the book</span></div>
+    <div class="kitchen-stat"><strong id="statIngredients">—</strong><span>priced ingredients</span></div>
+    <div class="kitchen-stat"><strong id="statBrands">—</strong><span>brand options</span></div>
+    <div class="kitchen-stat"><strong id="statVegan">—</strong><span>fully plant-based</span></div>
+  </div>
+
+  <div class="pantry-strip" id="pantryStrip"></div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════ RECIPE MODAL ════════════════════════════ -->
+<div class="modal" id="recipeModal" hidden>
+  <div class="modal__scrim" data-close></div>
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal__close" data-close aria-label="Close recipe">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════ FOOTER ════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <span class="brand__text">Budget<em>Bites</em></span>
+      <p>Intelligent meal and grocery planning that respects your body, your kitchen and your bank balance.</p>
+    </div>
+    <div class="footer__note">
+      <p><strong>A note on the numbers.</strong> Energy targets use the Mifflin–St Jeor equation with a light-activity factor. Shelf prices are indicative estimates for planning, not live quotes — quick-commerce prices move by the hour and by dark store. The platform buttons open a real search so you can check today's number. Budget Bites is a planning tool, not medical or dietary advice.</p>
+    </div>
+  </div>
+  <div class="footer__base">
+    <span>Made with 🍓 and a calculator</span>
+    <span>Everything runs in your browser. Nothing leaves your device.</span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
