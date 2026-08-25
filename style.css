@@ -607,6 +607,21 @@ a { color: inherit; text-decoration: none; }
 .score__meter i { display: block; height: 100%; border-radius: var(--r-pill); background: #fff; transition: width .8s cubic-bezier(.3,1,.4,1); }
 .score:not(.score--hero) .score__meter i { background: var(--grad-hot); }
 
+/* kitchen stats strip */
+.kitchen-stats-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+.kitchen-stats-strip .kitchen-stat {
+  padding: 16px 20px; text-align: center;
+  background: var(--surface); border-radius: var(--r-lg);
+  box-shadow: var(--sh-xs), inset 0 0 0 1.5px var(--line);
+}
+.kitchen-stats-strip .kitchen-stat__value {
+  display: block;
+  font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; line-height: 1;
+  color: var(--raspberry);
+  margin-bottom: 4px;
+}
+.kitchen-stats-strip .kitchen-stat__label { font-size: .8rem; color: var(--ink-soft); font-weight: 600; }
+
 .pill {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 4px 12px; border-radius: var(--r-pill);
@@ -1497,6 +1512,7 @@ body.is-locked .topbar { display: none !important; }
   }
   .steps, .deliver-grid, .kitchen-grid { grid-template-columns: repeat(2, 1fr); }
   .scoreboard { grid-template-columns: repeat(2, 1fr); }
+  .kitchen-stats-strip { grid-template-columns: repeat(2, 1fr); }
   .nutri-grid, .reuse-grid { grid-template-columns: 1fr; }
   .meal-row { grid-template-columns: repeat(2, 1fr); }
   .meal:nth-child(2) { border-right: none; }
@@ -1548,7 +1564,7 @@ body.is-locked .topbar { display: none !important; }
   .results { padding: 40px 18px 56px; }
 
   .hero__stats { gap: 22px; }
-  .steps, .deliver-grid, .kitchen-grid, .scoreboard { grid-template-columns: 1fr; }
+  .steps, .deliver-grid, .kitchen-grid, .scoreboard, .kitchen-stats-strip { grid-template-columns: 1fr; }
 
   .wizard { padding: 26px 20px; border-radius: var(--r-lg); }
   .field-grid { grid-template-columns: 1fr; }

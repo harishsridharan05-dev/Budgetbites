@@ -1293,6 +1293,12 @@ window.Auth = Auth;
         <p class="score__note">target ${T.protein} g</p></div>
     </div>
 
+    <div class="kitchen-stats-strip">
+      <div class="kitchen-stat"><span class="kitchen-stat__value" id="resultRecipes">—</span><span class="kitchen-stat__label">Recipes</span></div>
+      <div class="kitchen-stat"><span class="kitchen-stat__value" id="resultIngredients">—</span><span class="kitchen-stat__label">Ingredients</span></div>
+      <div class="kitchen-stat"><span class="kitchen-stat__value" id="resultBrands">—</span><span class="kitchen-stat__label">Brands</span></div>
+    </div>
+
     <div class="tabs" role="tablist">
       ${[['mealplan','🍽️','Meal plan'],['grocery','🛒','Grocery list'],['nutrition','📊','Nutrition'],
          ['brands','🏷️','Brand analysis'],['order','🚚','Where to order']].map(([k,e,l]) =>
@@ -1489,6 +1495,15 @@ window.Auth = Auth;
 
   /* ------------------------------------------------------------ results wiring */
   function bindResults(lines, shown) {
+    // Populate Kitchen Stats strip in Results
+    const brandCount = Object.values(BR).flat().length;
+    const resultRecipes = $('#resultRecipes');
+    const resultIngredients = $('#resultIngredients');
+    const resultBrands = $('#resultBrands');
+    if (resultRecipes) resultRecipes.textContent = RECIPES.length;
+    if (resultIngredients) resultIngredients.textContent = Object.keys(ING).length;
+    if (resultBrands) resultBrands.textContent = brandCount;
+
     $$('.tab').forEach(tab => tab.addEventListener('click', () => {
       activeTab = tab.dataset.panel;
       $$('.tab').forEach(t => t.classList.toggle('is-active', t === tab));
