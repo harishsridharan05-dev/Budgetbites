@@ -968,7 +968,7 @@ window.Auth = Auth;
       .map(([k, v]) => chip('goal', k, v.n, v.d, false,
         { lose:'🔥', maintain:'⚖️', gain:'🌱', muscle:'💪' }[k])).join('')}</div>
 
-    <span class="group-label">Number of consumers <em>— everyone eating from this plan</em></span>
+    <span class="group-label">Household size / number of consumers <em>— everyone eating from this plan</em></span>
     <div class="slider-card">
       <div class="slider-card__value"><span id="peopleOut">${S.people}</span><em>${S.people > 1 ? 'people' : 'person'}</em></div>
       <input type="range" id="people" class="range" min="1" max="8" step="1" value="${S.people}">
@@ -979,16 +979,16 @@ window.Auth = Auth;
   function s2() {
     return `
     <span class="group-label">Cuisine <em>— every dish in the plan is cooked this way</em></span>
-    <div class="chip-grid">${Object.entries(CUISINES)
+    <div class="chip-grid" aria-label="Cuisine selection">${Object.entries(CUISINES)
       .map(([k, v]) => chip('cuisine', k, v.n, v.d, false, v.emoji)).join('')}</div>
 
     <span class="group-label">Dietary preference</span>
-    <div class="chip-grid">${Object.entries(DIETS)
+    <div class="chip-grid" aria-label="Dietary preference selection">${Object.entries(DIETS)
       .map(([k, v]) => chip('diet', k, v.n, v.d, false,
         { vegan:'🌱', veg:'🥕', egg:'🥚', nonveg:'🍗' }[k])).join('')}</div>
 
     <span class="group-label">Allergies <em>— tap all that apply, leave blank if none</em></span>
-    <div class="chip-grid chip-grid--tight">${Object.entries(ALLERGENS)
+    <div class="chip-grid chip-grid--tight" aria-label="Allergy selection">${Object.entries(ALLERGENS)
       .map(([k, v]) => chip('allergies', k, v, '', true,
         { dairy:'🥛', gluten:'🌾', peanut:'🥜', nuts:'🌰', egg:'🥚', fish:'🐟', soy:'🫘', sesame:'🌻' }[k])).join('')}</div>`;
   }
@@ -996,13 +996,14 @@ window.Auth = Auth;
   function s3() {
     return `
     <span class="group-label">Cooking experience</span>
-    <div class="chip-grid">${Object.entries(SKILLS)
+    <div class="chip-grid" aria-label="Cooking experience selection">${Object.entries(SKILLS)
       .map(([k, v]) => chip('skill', +k, v.n, v.d, false, { 1:'🥄', 2:'🍳', 3:'🔪' }[k])).join('')}</div>
 
     <span class="group-label">Available cooking time <em>— per meal, start to plate</em></span>
     <div class="slider-card">
       <div class="slider-card__value"><span id="timeOut">${S.time}</span><em>minutes</em></div>
-      <input type="range" id="time" class="range" min="10" max="60" step="5" value="${S.time}">
+      <input type="range" id="time" class="range" min="10" max="60" step="5" value="${S.time}"
+        aria-label="Available cooking time in minutes">
       <div class="slider-card__scale"><span>10 min</span><span>35 min</span><span>60 min</span></div>
     </div>`;
   }
@@ -1017,7 +1018,8 @@ window.Auth = Auth;
     <span class="group-label">Grocery budget <em>— total for the whole plan, everyone eating</em></span>
     <div class="slider-card">
       <div class="slider-card__value"><span id="budgetOut">${money(S.budget)}</span></div>
-      <input type="range" id="budget" class="range" min="500" max="15000" step="100" value="${S.budget}">
+      <input type="range" id="budget" class="range" min="500" max="15000" step="100" value="${S.budget}"
+        aria-label="Grocery budget in rupees">
       <div class="slider-card__scale"><span>₹500</span><span>₹7,750</span><span>₹15,000</span></div>
     </div>
 
@@ -1031,7 +1033,8 @@ window.Auth = Auth;
      ================================================================== */
   function drawForm() {
     const st = STEPS[step];
-    $('#stepno').textContent = `Step ${step + 1} of ${STEPS.length}`;
+    const progress = Math.round((step + 1) / STEPS.length * 100);
+    $('#stepno').textContent = `Step ${step + 1} of ${STEPS.length} · ${progress}% complete`;
     $('#formBody').innerHTML =
       `<h3 class="step__legend"><span>${st.icon}</span> ${esc(st.t)}</h3>
        <p class="step__hint">${esc(st.h)}</p>${st.render()}`;
@@ -1040,7 +1043,11 @@ window.Auth = Auth;
       `<li class="${i === step ? 'is-active' : ''} ${i < step ? 'is-done' : ''}" data-step="${i}">
          <span class="dot">${s.icon}</span><em>${esc(s.label)}</em></li>`).join('');
 
-    $('#progressFill').style.width = ((step + 1) / STEPS.length * 100) + '%';
+    $('#progressFill').style.width = progress + '%';
+    $('#progressFill').setAttribute('role', 'progressbar');
+    $('#progressFill').setAttribute('aria-valuenow', progress);
+    $('#progressFill').setAttribute('aria-valuemin', '0');
+    $('#progressFill').setAttribute('aria-valuemax', '100');
     $('#backBtn').disabled = step === 0;
     $('#nextBtn').textContent = step === STEPS.length - 1 ? 'Generate my plan' : 'Continue';
     $('#err').textContent = '';
