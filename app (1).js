@@ -48,6 +48,26 @@ function targets(S) {
            bmi: Math.round(bmi * 10) / 10, bmiBand };
 }
 
+/* Calculate average macro values from a meal plan.
+   Returns { kcal, protein, carbs, fat } as daily averages across the plan. */
+function macrosOf(days, factors) {
+  if (!days || !days.length) return { kcal: 0, protein: 0, carbs: 0, fat: 0 };
+  
+  const sumBy = key => days.map((d, i) => 
+    d.reduce((a, r) => a + (r ? r[key] : 0), 0) * (factors[i] || 1)
+  );
+  
+  const avg = arr => Math.round(arr.reduce((a, b) => a + b, 0) / days.length);
+  
+  const dayKcal = sumBy('kcal').map(Math.round);
+  const avgK = avg(dayKcal);
+  const avgP = avg(sumBy('pro'));
+  const avgC = avg(sumBy('carb'));
+  const avgF = avg(sumBy('fat'));
+  
+  return { kcal: avgK, protein: avgP, carbs: avgC, fat: avgF };
+}
+
 const SHARE_4 = { breakfast: .25, lunch: .34, dinner: .30, snack: .11 };
 const SHARE_3 = { breakfast: .28, lunch: .38, dinner: .34 };
 
@@ -1355,16 +1375,17 @@ window.Auth = Auth;
     <div class="panel ${activeTab === 'nutrition' ? 'is-active' : ''}" id="panel-nutrition">
       <div class="nutri-grid">
         <div class="card">
-          <h3 class="card__title">Against your targets</h3>
+          <h3 class="card__title">Nutrition dashboard</h3>
           <p class="card__sub">Per person, per day, averaged across the plan.</p>
           <div class="macro-list">
-            ${[['Protein', avgP, T.protein, 'var(--c1)'],
-               ['Carbohydrate', avgC, T.carbs, 'var(--c2)'],
-               ['Fat', avgF, T.fat, 'var(--c3)']].map(([n, v, t, c]) => `
+            ${[['Calories', avgK, T.kcal, 'var(--c1)', 'kcal'],
+               ['Protein', avgP, T.protein, 'var(--c1)', 'g'],
+               ['Carbohydrate', avgC, T.carbs, 'var(--c2)', 'g'],
+               ['Fat', avgF, T.fat, 'var(--c3)', 'g']].map(([n, v, t, c, u]) => `
               <div class="macro">
                 <div class="macro__top"><span class="macro__name">${n}</span>
-                  <span class="macro__target">target ${t}g</span>
-                  <span class="macro__val">${v}g</span></div>
+                  <span class="macro__target">target ${t}${u}</span>
+                  <span class="macro__val">${v}<small>${u}</small></span></div>
                 <div class="bar"><i style="width:${Math.min(100, v / t * 100)}%;background:${c}"></i></div>
               </div>`).join('')}
           </div>

@@ -788,6 +788,7 @@ a { color: inherit; text-decoration: none; }
 .macro__top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
 .macro__name { font-weight: 600; font-size: .95rem; color: var(--plum); }
 .macro__val { margin-left: auto; font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--raspberry); }
+.macro__val small { font-size: .7rem; font-weight: 600; margin-left: 4px; }
 .macro__target { font-size: .8rem; color: var(--ink-faint); }
 
 .bar { height: 12px; background: var(--blush); border-radius: var(--r-pill); overflow: hidden; position: relative; }
