@@ -317,3 +317,6 @@ Budget Bites is divided into three major layers:
 │  Brand Information           │
 │  Grocery Platforms           │
 └──────────────────────────────┘
+
+## Jenkins CI
+This project uses Jenkins to automatically validate the application and build Docker images.
