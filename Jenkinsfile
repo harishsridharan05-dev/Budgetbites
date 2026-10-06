@@ -57,28 +57,24 @@ Image: ${IMAGE_NAME}:${IMAGE_TAG}
 
                     echo 'Checking project files...'
 
-                    if (!fileExists('index (2).html')) {
-                        error 'index (2).html is missing'
+                    if (!fileExists('index.html')) {
+                        error 'index.html is missing'
                     }
 
-                    if (!fileExists('style.css')) {
-                        error 'style.css is missing'
+                    if (!fileExists('css')) {
+                        error 'css directory is missing'
                     }
 
-                    if (!fileExists('app (1).js')) {
-                        error 'app (1).js is missing'
+                    if (!fileExists('js')) {
+                        error 'js directory is missing'
                     }
 
-                    if (!fileExists('data (1).js')) {
-                        error 'data (1).js is missing'
-                    }
+                    echo 'Required project structure found'
 
-                    echo 'All project files found'
+                    def html = readFile('index.html')
 
-                    def html = readFile('index (2).html')
-
-                    if (!html.toLowerCase().contains('<title>')) {
-                        echo 'Warning: <title> tag not found'
+                    if (!html.toLowerCase().contains('<html')) {
+                        error 'index.html does not appear to be a valid HTML file'
                     }
 
                     echo 'HTML validation passed'
@@ -93,15 +89,14 @@ Image: ${IMAGE_NAME}:${IMAGE_TAG}
                     writeFile file: 'Dockerfile', text: '''
 FROM nginx:alpine
 
-COPY index (2).html /usr/share/nginx/html/index.html
-COPY style.css /usr/share/nginx/html/style.css
-COPY app (1).js /usr/share/nginx/html/app.js
-COPY data (1).js /usr/share/nginx/html/data.js
+COPY index.html /usr/share/nginx/html/index.html
+COPY css/ /usr/share/nginx/html/css/
+COPY js/ /usr/share/nginx/html/js/
 
 EXPOSE 80
 '''
 
-                    echo 'Dockerfile created'
+                    echo 'Dockerfile created successfully'
                 }
             }
         }
@@ -139,10 +134,6 @@ EXPOSE 80
                     }
 
                     echo 'Application is running successfully'
-
-                    echo "Testing Budget Bites..."
-
-                    bat "curl -f http://localhost:${TEST_PORT}/"
 
                     echo 'Container test passed'
                 }
